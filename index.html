@@ -7,149 +7,1051 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --primary: #6C63FF; --secondary: #4A44C6; --success: #00B894; --background: #0F0F23; --card-bg: #1A1A2E; --text: #FFFFFF; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--background); color: var(--text); min-height: 100vh; padding: 15px; }
-        .container { max-width: 500px; margin: 0 auto; }
-        .header { text-align: center; margin-bottom: 25px; padding: 20px; background: var(--card-bg); border-radius: 20px; }
-        .logo { width: 80px; height: 80px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 32px; }
-        .balance-card { background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 20px; padding: 25px; margin: 15px 0; text-align: center; }
-        .balance-amount { font-size: 42px; font-weight: 700; margin: 10px 0; }
-        .action-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 25px 0; }
-        .btn { padding: 18px; border: none; border-radius: 15px; font-size: 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-primary { background: var(--success); color: white; }
-        .btn-secondary { background: var(--card-bg); color: var(--text); border: 2px solid var(--primary); }
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
-        .stat-card { background: var(--card-bg); padding: 20px; border-radius: 15px; text-align: center; }
-        .stat-value { font-size: 24px; font-weight: 700; color: var(--success); }
-        .stat-label { font-size: 12px; opacity: 0.8; margin-top: 5px; }
-        .referral-section { background: var(--card-bg); border-radius: 20px; padding: 20px; margin: 20px 0; }
-        .transaction-item { background: var(--card-bg); padding: 15px; border-radius: 10px; margin: 10px 0; display: flex; justify-content: space-between; align-items: center; }
-        .menu { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card-bg); display: flex; justify-content: space-around; padding: 15px; }
-        .menu-item { text-align: center; color: var(--text); opacity: 0.7; cursor: pointer; }
-        .menu-item.active { opacity: 1; color: var(--primary); }
-        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center; }
-        .modal-content { background: var(--card-bg); padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; }
+        /* AI Earn Exact Colors */
+        :root {
+            --primary: #7B61FF;
+            --secondary: #5D4AE3;
+            --success: #00C087;
+            --danger: #FF4757;
+            --warning: #FFA502;
+            --background: #0A0A14;
+            --card-bg: #151522;
+            --text: #FFFFFF;
+            --text-secondary: #A0A0B0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .app-container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 15px;
+            padding-bottom: 80px;
+        }
+        
+        /* Header - AI Earn Style */
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            margin-bottom: 15px;
+        }
+        
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+        
+        .logo-text h1 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .logo-text p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .user-badge {
+            background: var(--card-bg);
+            padding: 8px 12px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        
+        /* Balance Card - AI Earn Style */
+        .balance-card {
+            background: linear-gradient(135deg, var(--primary), #8B7AFF);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .balance-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+        
+        .balance-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+        
+        .balance-amount {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 4px;
+            letter-spacing: -1px;
+        }
+        
+        .balance-subtext {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        /* Quick Actions - AI Earn Style */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 20px 0;
+        }
+        
+        .action-btn {
+            background: var(--card-bg);
+            border: none;
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .action-btn:active {
+            transform: scale(0.98);
+            background: rgba(123, 97, 255, 0.2);
+        }
+        
+        .action-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+            width: 48px;
+            height: 48px;
+            background: rgba(123, 97, 255, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .action-text {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        /* Stats Grid - AI Earn Style */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 24px 0;
+        }
+        
+        .stat-item {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 18px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--success);
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        /* Investment Card - AI Earn Style */
+        .investment-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .investment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .investment-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .investment-badge {
+            background: rgba(0, 192, 135, 0.2);
+            color: var(--success);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .investment-details {
+            margin-top: 16px;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        
+        /* Referral Card - AI Earn Style */
+        .referral-card {
+            background: linear-gradient(135deg, #5D4AE3, #7B61FF);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .referral-card::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+        
+        .referral-code {
+            background: rgba(255,255,255,0.15);
+            border: 2px dashed rgba(255,255,255,0.3);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            margin: 16px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+        
+        /* Transactions - AI Earn Style */
+        .transactions-section {
+            margin: 24px 0;
+        }
+        
+        .transaction-item {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 16px;
+            margin: 8px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .transaction-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+        }
+        
+        .deposit-icon { background: rgba(0, 192, 135, 0.2); color: var(--success); }
+        .withdraw-icon { background: rgba(255, 71, 87, 0.2); color: var(--danger); }
+        .profit-icon { background: rgba(255, 165, 2, 0.2); color: var(--warning); }
+        
+        .transaction-info {
+            flex: 1;
+        }
+        
+        .transaction-type {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .transaction-time {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .transaction-amount {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        
+        .positive { color: var(--success); }
+        .negative { color: var(--danger); }
+        
+        /* Bottom Nav - AI Earn Style */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--card-bg);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .nav-item.active {
+            color: var(--primary);
+            background: rgba(123, 97, 255, 0.1);
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        
+        .nav-label {
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        /* Modals - AI Earn Style */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 10, 20, 0.95);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 24px;
+            width: 100%;
+            max-width: 400px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+        
+        .close-modal:active {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        /* Inputs - AI Earn Style */
+        .input-group {
+            margin: 16px 0;
+        }
+        
+        .input-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 16px;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 16px;
+            font-family: inherit;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        /* Buttons - AI Earn Style */
+        .btn {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 8px 0;
+        }
+        
+        .btn:active {
+            transform: scale(0.98);
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: var(--text);
+        }
+        
+        /* QR Code - AI Earn Style */
+        .qr-container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            display: inline-block;
+            margin: 16px 0;
+        }
+        
+        /* Network Badge */
+        .network-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(240, 185, 11, 0.2);
+            color: #F0B90B;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo"><i class="fas fa-gem"></i></div>
-            <h1>Iconic Jewels</h1>
-            <p>Secure Jewelry-Backed Investments</p>
-        </div>
-        
-        <div class="balance-card">
-            <div style="opacity: 0.9;">Total Balance</div>
-            <div class="balance-amount" id="balance">0.00 USDT</div>
-            <div style="font-size: 14px; opacity: 0.8;">≈ $0.00</div>
-        </div>
-        
-        <div class="action-buttons">
-            <button class="btn btn-primary" onclick="showDeposit()"><i class="fas fa-wallet"></i> Deposit</button>
-            <button class="btn btn-secondary" onclick="showWithdraw()"><i class="fas fa-paper-plane"></i> Withdraw</button>
-        </div>
-        
-        <div class="stats-grid">
-            <div class="stat-card"><div class="stat-value" id="dailyProfit">0.00</div><div class="stat-label">Daily Profit</div></div>
-            <div class="stat-card"><div class="stat-value" id="totalInvested">0.00</div><div class="stat-label">Total Invested</div></div>
-            <div class="stat-card"><div class="stat-value" id="securityReserve">0.00</div><div class="stat-label">Security Reserve</div></div>
-        </div>
-        
-        <div class="referral-section">
-            <h3><i class="fas fa-chart-line"></i> Investment Details</h3>
-            <div style="margin: 15px 0;">
-                <div style="display: flex; justify-content: space-between; margin: 10px 0;"><span>Daily Return:</span><span style="color: var(--success);">0.1% - 1.0%</span></div>
-                <div style="display: flex; justify-content: space-between; margin: 10px 0;"><span>Security Reserve:</span><span style="color: var(--success);">50%</span></div>
-                <div style="display: flex; justify-content: space-between; margin: 10px 0;"><span>Withdrawal Fee:</span><span style="color: var(--success);">0%</span></div>
+    <!-- Main App Container -->
+    <div class="app-container" id="appContainer">
+        <!-- Header -->
+        <div class="app-header">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <i class="fas fa-gem"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>Iconic Jewels</h1>
+                    <p>Jewelry-Backed Investments</p>
+                </div>
+            </div>
+            <div class="user-badge">
+                <i class="fas fa-user"></i>
+                <span id="userName">Loading...</span>
             </div>
         </div>
         
-        <div class="transactions">
-            <h3><i class="fas fa-history"></i> Recent Transactions</h3>
-            <div id="transactionsList"></div>
+        <!-- Balance Card -->
+        <div class="balance-card">
+            <div class="balance-label">Total Balance</div>
+            <div class="balance-amount" id="balanceAmount">0.00</div>
+            <div class="balance-subtext">USDT • <span id="usdValue">$0.00</span></div>
         </div>
         
-        <div class="menu">
-            <div class="menu-item active"><i class="fas fa-home"></i><div style="font-size: 12px;">Home</div></div>
-            <div class="menu-item" onclick="showInvest()"><i class="fas fa-chart-pie"></i><div style="font-size: 12px;">Invest</div></div>
-            <div class="menu-item" onclick="showReferrals()"><i class="fas fa-users"></i><div style="font-size: 12px;">Team</div></div>
-            <div class="menu-item" onclick="showProfile()"><i class="fas fa-user"></i><div style="font-size: 12px;">Profile</div></div>
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <button class="action-btn" onclick="openDepositModal()">
+                <div class="action-icon">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <div class="action-text">Deposit</div>
+            </button>
+            <button class="action-btn" onclick="openWithdrawModal()">
+                <div class="action-icon">
+                    <i class="fas fa-paper-plane"></i>
+                </div>
+                <div class="action-text">Withdraw</div>
+            </button>
+        </div>
+        
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-value" id="dailyProfit">0.00</div>
+                <div class="stat-label">Daily Profit</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="totalInvested">0.00</div>
+                <div class="stat-label">Total Invested</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="totalEarned">0.00</div>
+                <div class="stat-label">Total Earned</div>
+            </div>
+        </div>
+        
+        <!-- Investment Card -->
+        <div class="investment-card">
+            <div class="investment-header">
+                <div class="investment-title">Investment Plan</div>
+                <div class="investment-badge">ACTIVE</div>
+            </div>
+            <div class="investment-details">
+                <div class="detail-row">
+                    <span>Daily Profit</span>
+                    <span style="color: var(--success); font-weight: 600;">0.1% - 1.0%</span>
+                </div>
+                <div class="detail-row">
+                    <span>Security Reserve</span>
+                    <span style="color: var(--success); font-weight: 600;">50%</span>
+                </div>
+                <div class="detail-row">
+                    <span>Withdrawal Fee</span>
+                    <span style="color: var(--success); font-weight: 600;">0%</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Referral Card -->
+        <div class="referral-card">
+            <div style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">
+                <i class="fas fa-users"></i> 10-Level Referral
+            </div>
+            <div style="font-size: 14px; opacity: 0.9; margin-bottom: 16px;">
+                Earn 1% commission on each level of your team
+            </div>
+            <div class="referral-code" id="referralCode">
+                LOADING...
+            </div>
+            <button class="btn btn-primary" onclick="openReferralModal()">
+                <i class="fas fa-share-alt"></i> Share & Earn
+            </button>
+        </div>
+        
+        <!-- Transactions Section -->
+        <div class="transactions-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <div style="font-size: 18px; font-weight: 600;">Recent Transactions</div>
+                <div style="font-size: 12px; color: var(--text-secondary); cursor: pointer;" onclick="loadMoreTransactions()">
+                    View All
+                </div>
+            </div>
+            <div id="transactionsList">
+                <!-- Transactions will be loaded here -->
+            </div>
+        </div>
+        
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item active" onclick="showSection('dashboard')">
+                <div class="nav-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+                <div class="nav-label">Home</div>
+            </div>
+            <div class="nav-item" onclick="showSection('invest')">
+                <div class="nav-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="nav-label">Invest</div>
+            </div>
+            <div class="nav-item" onclick="showSection('team')">
+                <div class="nav-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="nav-label">Team</div>
+            </div>
+            <div class="nav-item" onclick="showSection('profile')">
+                <div class="nav-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="nav-label">Profile</div>
+            </div>
         </div>
     </div>
     
-    <div id="depositModal" class="modal">
+    <!-- Deposit Modal -->
+    <div class="modal-overlay" id="depositModal">
         <div class="modal-content">
-            <h2>Deposit USDT</h2>
-            <div style="margin: 20px 0; text-align: center;">
-                <div id="depositAddress" style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; font-family: monospace; word-break: break-all; margin: 15px 0;">0x742d35Cc6634C0532925a3b844Bc9e...</div>
-                <small style="opacity: 0.7;">Send only USDT (ERC-20) to this address</small>
+            <div class="modal-header">
+                <div class="modal-title">Deposit USDT</div>
+                <button class="close-modal" onclick="closeDepositModal()">×</button>
             </div>
-            <button class="btn btn-primary" onclick="copyAddress()" style="width: 100%;"><i class="fas fa-copy"></i> Copy Address</button>
-            <button class="btn btn-secondary" onclick="closeDeposit()" style="width: 100%; margin-top: 10px;">Close</button>
+            
+            <div style="text-align: center;">
+                <div class="network-badge">
+                    <i class="fas fa-link"></i>
+                    BEP-20 Network
+                </div>
+                
+                <div style="margin: 20px 0;">
+                    <div class="qr-container" id="qrCode">
+                        <!-- QR Code will be generated here -->
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <div class="input-label">Your Deposit Address</div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 16px; border-radius: 12px; font-family: monospace; word-break: break-all; font-size: 14px;" id="depositAddress">
+                        0x0000000000000000000000000000000000000000
+                    </div>
+                </div>
+                
+                <div style="background: rgba(240, 185, 11, 0.1); padding: 12px; border-radius: 12px; margin: 16px 0; text-align: left;">
+                    <div style="font-size: 12px; color: #F0B90B; display: flex; align-items: flex-start; gap: 8px;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div>
+                            <strong>Important:</strong> Send only USDT on BEP-20 network. Other tokens will be lost.
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" onclick="copyDepositAddress()">
+                    <i class="fas fa-copy"></i> Copy Address
+                </button>
+                <button class="btn btn-secondary" onclick="closeDepositModal()">
+                    Done
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Withdraw Modal -->
+    <div class="modal-overlay" id="withdrawModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Withdraw USDT</div>
+                <button class="close-modal" onclick="closeWithdrawModal()">×</button>
+            </div>
+            
+            <div class="input-group">
+                <div class="input-label">Amount (USDT)</div>
+                <input type="number" class="input-field" id="withdrawAmount" placeholder="0.00" step="0.01" min="10">
+                <div style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">
+                    Available: <span id="availableBalance">0.00</span> USDT
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <div class="input-label">BEP-20 Address</div>
+                <input type="text" class="input-field" id="withdrawAddress" placeholder="0x...">
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.05); padding: 16px; border-radius: 12px; margin: 20px 0;">
+                <div style="display: flex; justify-content: space-between; margin: 8px 0;">
+                    <span>Withdrawal Amount</span>
+                    <span id="withdrawDisplay">0.00 USDT</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin: 8px 0;">
+                    <span>Network Fee</span>
+                    <span>1.00 USDT</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin: 8px 0; font-weight: 600;">
+                    <span>You Receive</span>
+                    <span id="receiveAmount">0.00 USDT</span>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" onclick="processWithdrawal()" id="withdrawBtn">
+                <i class="fas fa-paper-plane"></i> Confirm Withdrawal
+            </button>
+        </div>
+    </div>
+    
+    <!-- Referral Modal -->
+    <div class="modal-overlay" id="referralModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">10-Level Referral System</div>
+                <button class="close-modal" onclick="closeReferralModal()">×</button>
+            </div>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <div style="font-size: 42px; font-weight: 800; color: var(--primary);">1%</div>
+                <div style="font-size: 16px; margin-bottom: 24px;">Commission per level</div>
+            </div>
+            
+            <div id="referralLevels">
+                <!-- Levels will be generated here -->
+            </div>
+            
+            <div style="margin: 24px 0;">
+                <div class="input-group">
+                    <div class="input-label">Your Referral Link</div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 16px; border-radius: 12px; font-family: monospace; word-break: break-all; font-size: 14px;" id="referralLink">
+                        https://t.me/IconicJewelsBot?start=ref_000000
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" onclick="copyReferralLink()">
+                <i class="fas fa-copy"></i> Copy Link
+            </button>
         </div>
     </div>
 
+    <!-- JavaScript -->
     <script>
+        // Initialize Telegram Web App
         let tg = window.Telegram.WebApp;
         tg.expand();
         tg.ready();
         
+        // Telegram User Data
+        let telegramUser = tg.initDataUnsafe.user;
+        let userId = telegramUser?.id || Math.floor(Math.random() * 1000000);
+        let userName = telegramUser?.first_name || 'User';
+        if (telegramUser?.last_name) userName += ' ' + telegramUser.last_name;
+        
+        // User Data
         let userData = {
-            balance: 100.00,
-            dailyProfit: 0.50,
-            totalInvested: 100.00,
-            securityReserve: 50.00,
-            depositAddress: '0x742d35Cc6634C0532925a3b844Bc9e...'
+            balance: 0,
+            usdValue: 0,
+            dailyProfit: 0,
+            totalInvested: 0,
+            totalEarned: 0,
+            depositAddress: '',
+            referralCode: 'ICONIC' + userId.toString().substr(0, 6)
         };
         
-        function updateDisplay() {
-            document.getElementById('balance').textContent = userData.balance.toFixed(2) + ' USDT';
-            document.getElementById('dailyProfit').textContent = userData.dailyProfit.toFixed(2);
-            document.getElementById('totalInvested').textContent = userData.totalInvested.toFixed(2);
-            document.getElementById('securityReserve').textContent = userData.securityReserve.toFixed(2);
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set user info
+            document.getElementById('userName').textContent = userName;
+            document.getElementById('referralCode').textContent = userData.referralCode;
+            document.getElementById('referralLink').textContent = 
+                `https://t.me/IconicJewelsBot?start=ref_${userId}`;
+            
+            // Generate deposit address
+            generateDepositAddress();
+            
+            // Load initial data
+            loadUserData();
             loadTransactions();
+            generateReferralLevels();
+            
+            // Start auto-refresh
+            startAutoRefresh();
+        });
+        
+        // Generate unique deposit address for user
+        function generateDepositAddress() {
+            // This would come from your HD wallet system
+            // For now, generate a sample address
+            const sampleAddress = '0x' + Array.from({length: 40}, () => 
+                Math.floor(Math.random() * 16).toString(16)).join('');
+            userData.depositAddress = sampleAddress;
+            document.getElementById('depositAddress').textContent = sampleAddress;
+            
+            // Generate simple QR code
+            generateQRCode(sampleAddress);
         }
         
-        function showDeposit() {
+        function generateQRCode(address) {
+            // Simple QR code representation
+            const qrContainer = document.getElementById('qrCode');
+            qrContainer.innerHTML = `
+                <div style="width: 180px; height: 180px; background: white; padding: 10px; border-radius: 8px;">
+                    <div style="text-align: center; font-size: 10px; color: #333; padding-top: 70px;">
+                        SCAN FOR<br/>DEPOSIT ADDRESS
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Load user data from API
+        async function loadUserData() {
+            try {
+                // This would be your API call
+                // For demo, use sample data
+                userData.balance = 156.78;
+                userData.usdValue = userData.balance * 1; // 1:1 for demo
+                userData.dailyProfit = 0.78;
+                userData.totalInvested = 150.00;
+                userData.totalEarned = 6.78;
+                
+                updateDisplay();
+                
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+        
+        function updateDisplay() {
+            document.getElementById('balanceAmount').textContent = userData.balance.toFixed(2);
+            document.getElementById('usdValue').textContent = '$' + userData.usdValue.toFixed(2);
+            document.getElementById('dailyProfit').textContent = userData.dailyProfit.toFixed(2);
+            document.getElementById('totalInvested').textContent = userData.totalInvested.toFixed(2);
+            document.getElementById('totalEarned').textContent = userData.totalEarned.toFixed(2);
+            document.getElementById('availableBalance').textContent = userData.balance.toFixed(2);
+        }
+        
+        // Modal Functions
+        function openDepositModal() {
             document.getElementById('depositModal').style.display = 'flex';
         }
         
-        function closeDeposit() {
+        function closeDepositModal() {
             document.getElementById('depositModal').style.display = 'none';
         }
         
-        function copyAddress() {
+        function openWithdrawModal() {
+            document.getElementById('withdrawAmount').value = '';
+            document.getElementById('withdrawAddress').value = '';
+            updateWithdrawCalculation();
+            document.getElementById('withdrawModal').style.display = 'flex';
+        }
+        
+        function closeWithdrawModal() {
+            document.getElementById('withdrawModal').style.display = 'none';
+        }
+        
+        function openReferralModal() {
+            document.getElementById('referralModal').style.display = 'flex';
+        }
+        
+        function closeReferralModal() {
+            document.getElementById('referralModal').style.display = 'none';
+        }
+        
+        // Copy Functions
+        function copyDepositAddress() {
             navigator.clipboard.writeText(userData.depositAddress);
-            tg.showPopup({ title: 'Copied!', message: 'Address copied', buttons: [{type: 'ok'}] });
+            tg.showPopup({
+                title: 'Copied!',
+                message: 'Deposit address copied to clipboard',
+                buttons: [{type: 'ok'}]
+            });
         }
         
-        function showWithdraw() {
-            tg.showPopup({ title: 'Withdraw', message: 'Feature coming soon', buttons: [{type: 'ok'}] });
+        function copyReferralLink() {
+            const link = `https://t.me/IconicJewelsBot?start=ref_${userId}`;
+            navigator.clipboard.writeText(link);
+            tg.showPopup({
+                title: 'Copied!',
+                message: 'Referral link copied to clipboard',
+                buttons: [{type: 'ok'}]
+            });
         }
         
-        function showInvest() {
-            tg.showPopup({ title: 'Investment', message: 'Daily: 0.1%-1.0%\nSecurity: 50%\nFee: 0%', buttons: [{type: 'ok'}] });
+        // Withdrawal Calculation
+        function updateWithdrawCalculation() {
+            const amount = parseFloat(document.getElementById('withdrawAmount').value) || 0;
+            const fee = 1.00; // Network fee
+            const receive = amount - fee;
+            
+            document.getElementById('withdrawDisplay').textContent = amount.toFixed(2) + ' USDT';
+            document.getElementById('receiveAmount').textContent = receive > 0 ? receive.toFixed(2) + ' USDT' : '0.00 USDT';
+            
+            // Update button state
+            const btn = document.getElementById('withdrawBtn');
+            if (amount >= 10 && amount <= userData.balance && receive > 0) {
+                btn.disabled = false;
+                btn.style.opacity = '1';
+            } else {
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
+            }
         }
         
-        function showReferrals() {
-            tg.showPopup({ title: 'Team', message: 'Coming soon', buttons: [{type: 'ok'}] });
+        // Process Withdrawal
+        function processWithdrawal() {
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const address = document.getElementById('withdrawAddress').value;
+            
+            if (!address || !address.startsWith('0x') || address.length !== 42) {
+                tg.showPopup({
+                    title: 'Invalid Address',
+                    message: 'Please enter a valid BEP-20 address',
+                    buttons: [{type: 'ok'}]
+                });
+                return;
+            }
+            
+            tg.showPopup({
+                title: 'Confirm Withdrawal',
+                message: `Send ${amount} USDT to:\n${address}\n\nNetwork Fee: 1 USDT`,
+                buttons: [
+                    {type: 'cancel', text: 'Cancel'},
+                    {type: 'default', text: 'Confirm', id: 'confirmWithdraw'}
+                ]
+            });
+            
+            tg.offEvent('popupButtonClicked');
+            tg.onEvent('popupButtonClicked', function(btn) {
+                if (btn.id === 'confirmWithdraw') {
+                    // Simulate withdrawal processing
+                    const btn = document.getElementById('withdrawBtn');
+                    btn.innerHTML = '<div class="loading"></div> Processing...';
+                    btn.disabled = true;
+                    
+                    setTimeout(() => {
+                        tg.showPopup({
+                            title: 'Success!',
+                            message: `Withdrawal submitted. It will be processed within 15 minutes.`,
+                            buttons: [{type: 'ok'}]
+                        });
+                        closeWithdrawModal();
+                        loadUserData(); // Refresh balance
+                    }, 2000);
+                }
+            });
         }
         
-        function showProfile() {
-            tg.showPopup({ title: 'Profile', message: 'Iconic Jewels Member', buttons: [{type: 'ok'}] });
-        }
-        
+        // Load Transactions
         function loadTransactions() {
-            const html = `
-                <div class="transaction-item deposit"><div><div style="font-weight: 600;">⬇️ DEPOSIT</div><div style="font-size: 12px; opacity: 0.7;">2024-01-15</div></div><div style="color: #00B894; font-weight: 600;">+100 USDT</div></div>
-                <div class="transaction-item profit"><div><div style="font-weight: 600;">💰 PROFIT</div><div style="font-size: 12px; opacity: 0.7;">2024-01-15</div></div><div style="color: #FDCB6E; font-weight: 600;">+0.50 USDT</div></div>
-            `;
+            const transactions = [
+                { type: 'deposit', amount: 100, time: '2 hours ago' },
+                { type: 'profit', amount: 0.5, time: 'Today' },
+                { type: 'profit', amount: 0.5, time: 'Yesterday' },
+                { type: 'withdrawal', amount: 50, time: '2 days ago' }
+            ];
+            
+            let html = '';
+            transactions.forEach(tx => {
+                let iconClass = '';
+                let icon = '';
+                let sign = '';
+                
+                if (tx.type === 'deposit') {
+                    iconClass = 'deposit-icon';
+                    icon = 'fa-wallet';
+                    sign = '+';
+                } else if (tx.type === 'withdrawal') {
+                    iconClass = 'withdraw-icon';
+                    icon = 'fa-paper-plane';
+                    sign = '-';
+                } else {
+                    iconClass = 'profit-icon';
+                    icon = 'fa-coins';
+                    sign = '+';
+                }
+                
+                html += `
+                    <div class="transaction-item">
+                        <div class="transaction-icon ${iconClass}">
+                            <i class="fas ${icon}"></i>
+                        </div>
+                        <div class="transaction-info">
+                            <div class="transaction-type">${tx.type.toUpperCase()}</div>
+                            <div class="transaction-time">${tx.time}</div>
+                        </div>
+                        <div class="transaction-amount ${sign === '+' ? 'positive' : 'negative'}">
+                            ${sign}${tx.amount.toFixed(2)} USDT
+                        </div>
+                    </div>
+                `;
+            });
+            
             document.getElementById('transactionsList').innerHTML = html;
         }
         
-        updateDisplay();
-    </script>
-</body>
-</html>
+        function loadMoreTransactions() {
+            tg.showPopup({
+                title: 'Transaction History',
+                message: 'Full transaction history coming soon',
+                buttons: [{type: 'ok'}]
+            });
+        }
+        
+        // Generate Referral Levels
+        function generateReferralLevels() {
+            let html = '';
+            for (let level = 1; level <= 10; level++) {
+                const commission = level === 1 ? '2.00' : (level * 0.5).toFixed(2);
+                html += `
+                    <div class="detail-row">
+                        <span>Level ${level}</span>
+                        <span style="
